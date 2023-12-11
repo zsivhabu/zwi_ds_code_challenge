@@ -51,6 +51,7 @@ export default defineComponent({
 
     return {
       serverOptions,
+      serverItemsLength,
       headers,
       searchResults
     };
@@ -64,7 +65,7 @@ export default defineComponent({
    <EasyDataTable
        v-model:server-options="serverOptions"
        :server-items-length="serverItemsLength"
-       :key="JSON.stringify({ ...userserverOptions })"
+       :key="JSON.stringify({ ...serverOptions })"
        buttons-pagination
        :headers="headers"
        :items="searchResults"
