@@ -1,11 +1,12 @@
 body {
     max-height: 100vh;
     max-width: 100vw;
-    overflow: hidden;
+    overflow-x: hidden;
 }
 
 #sidebar, #content {
     transition: transform 0.5s ease;
+    overflow-y: auto !important;
 }
 
 .sidebar-hidden {

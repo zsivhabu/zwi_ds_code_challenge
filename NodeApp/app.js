@@ -1,6 +1,7 @@
 const express = require('express');
 const { getObject } = require('./services/s3Service');
 const apiRoutes = require('./services/apiService');
+const chartRoutes = require('./services/chartService');
 const fs = require('fs');
 const path = require('path');
 const zlib = require('zlib');
@@ -20,7 +21,9 @@ if (!fs.existsSync(filesFolder)) {
 
 app.use('/swagger', swaggerUi.serve, swaggerUi.setup(swaggerSpec));
 
+
 app.use('/api', apiRoutes);
+app.use('/api', chartRoutes);
 
 downloadAndUnzipFile().then(() => {
     app.listen(port, () => {

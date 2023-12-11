@@ -10,11 +10,14 @@ import Vue3EasyDataTable from 'vue3-easy-data-table';
 import {Axios} from "@/plugins/axios";
 // @ts-ignore
 import vSelect from 'vue-select'
+// @ts-ignore
+import {Tab, Tabs} from 'vue3-tabs-component';
 
 //css imports
 import '@vuepic/vue-datepicker/dist/main.css';
 import 'bootstrap-icons/font/bootstrap-icons.min.css'
 import 'vue-select/dist/vue-select.css';
+import 'vue3-easy-data-table/dist/style.css';
 import 'vue3-easy-data-table/dist/style.css';
 
 Promise.all([
@@ -30,7 +33,8 @@ Promise.all([
     app.component('v-select', vSelect)
     app.component('VueDatePicker', VueDatePicker);
     app.component('EasyDataTable', Vue3EasyDataTable);
-
+    app.component('tabs', Tabs)
+    app.component('tab', Tab)
     app.use(router)
 
     //axios setup

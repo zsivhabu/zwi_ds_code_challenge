@@ -68,7 +68,7 @@ export default defineComponent({
   <span class="absolute text-white text-4xl top-5 left-4 cursor-pointer z-40" @click="toggleSidebar()">
       <i class="bi bi-filter-left px-2 bg-gray-900 rounded-md"></i>
   </span>
-  <div id="sidebar"  :class="{ 'sidebar-hidden': isSidebarHidden, 'sidebar-open' : !isSidebarHidden }" class=" fixed top-0 bottom-0 lg:left-0 p-2 z-50  w-[80%] md:w-[400px]  overflow-y-auto text-center bg-city-dark-blue">
+  <div id="sidebar"  :class="{ 'sidebar-hidden': isSidebarHidden, 'sidebar-open' : !isSidebarHidden }" class=" fixed top-0 bottom-0 lg:left-0 p-2 z-50  w-[80%] md:w-[400px]   text-center bg-city-dark-blue">
     <div class="text-gray-100 text-xl">
       <div class="p-2.5 mt-1 flex items-center" >
         <span class="ml-3"><img class="w-full" src="@/assets/logo/logo-alternate.png" alt=""/></span>
@@ -94,12 +94,13 @@ export default defineComponent({
 
     <div class="my-4 bg-gray-600 h-[1px]"></div> <!-- Divider -->
 
-    <div class="pt-2.5 mt-3 flex items-center rounded-md px-4 duration-900 text-white">
+    <div  v-if=" routeName != 'chart'"  class="pt-2.5 mt-3 flex items-center rounded-md px-4 duration-900 text-white">
       <h1 class="text-[20px] text-white font-bold">Filters</h1>
       <small class="ml-4 mr-6 right-0 absolute text-10px">Leave blank fields if not applicable</small>
     </div>
 
-    <div class="">
+    <!-- Table and Map Filters -->
+    <div v-if=" routeName != 'chart'" class="">
       <div class="pt-2.5 mt-3 flex">
           <div class="w-1/2">
               <div class="items-center pl-1 pr-2 duration-900 text-white">
@@ -269,7 +270,7 @@ export default defineComponent({
 
     </div>
 
-    <div class="">
+    <div v-if=" routeName != 'chart'" class="">
       <div class="pt-2.5 mt-3 flex">
         <div class="w-[100%]">
           <div class="">
@@ -286,7 +287,7 @@ export default defineComponent({
       </div>
 
       <div :class="{'mb-[20px]': !isHideSelectFilters, '': !isHideSelectFilters}"  class="pt-2.5 mt-3 flex">
-        <div class="w-[100%]">
+        <div v-if=" routeName != 'chart'" class="w-[100%]">
           <div class="">
             <div class="w-[100%]">
               <div class="items-center pl-1 pr-2 duration-900 text-white">
@@ -300,12 +301,15 @@ export default defineComponent({
       </div>
     </div>
 
-    <div v-if="isHideSelectFilters" class="p-1.5 w-full mb-2  flex items-center px-4 duration-300 absolute bottom-0 left-0 text-white hidden-less-than-400px ">
+    <div v-if="isHideSelectFilters"  class="p-1.5 w-full mb-2  flex items-center px-4 duration-300 absolute bottom-0 left-0 text-white hidden-less-than-400px ">
       <a href="https://github.com/zsivhabu/zwi_ds_code_challenge/" target="_blank" class="text-[12px]">
         <i class="bi bi-github text-city-pink"></i>
         <span class="text-city-pink ml-4">CCT Service Request Dashboard By Zwi</span>
       </a>
     </div>
+    <!-- End Table and Map Filters -->
+
+
 
   </div>
 </template>

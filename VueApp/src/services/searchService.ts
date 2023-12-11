@@ -12,6 +12,7 @@ export class SearchService {
                 const validParams: Record<string, string | number> = {};
 
                 for (const key in searchFilter) {
+                    // @ts-ignore
                     const value = searchFilter[key];
                     if (value !== 'Any' && value != 'any' && value !== undefined && value !== '' && value !== 0) {
                         validParams[key] = value;

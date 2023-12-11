@@ -15,6 +15,7 @@ interface MenuState {
     routeName: string;
     searchFilter: SearchFilter;
     submitIncrement: number;
+    selectedDirectorate: string;
 }
 
 export const useMenuStore = defineStore("menuState", {
@@ -23,7 +24,8 @@ export const useMenuStore = defineStore("menuState", {
         isHideSelectFilters: true,
         routeName: "",
         searchFilter: DEFAULT_SEARCH_FILTERS,
-        submitIncrement: 0
+        submitIncrement: 0,
+        selectedDirectorate: "URBAN WASTE MANAGEMENT"
     }),
     persist: true,
     getters: {
@@ -49,6 +51,9 @@ export const useMenuStore = defineStore("menuState", {
         },
         incrementSubmit() {
             this.submitIncrement++;
+        },
+        setSelectedDirectorate(directorate: string) {
+            this.selectedDirectorate = directorate;
         }
     },
 });

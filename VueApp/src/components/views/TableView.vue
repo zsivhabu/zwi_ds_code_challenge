@@ -68,7 +68,7 @@ export default defineComponent({
        buttons-pagination
        :headers="headers"
        :items="searchResults"
-       theme-color=""
+       theme-color="#060d48"
        table-class-name="custom-easy-table"
        header-item-class-name="bg-red"
        body-row-class-name=""

@@ -32,3 +32,6 @@ The project includes two main folders:
 #Screenshots
 ## 1. Table Veiw 
 ![Alt Text](scr1.png)
+
+## 2. Chart View
+![Alt Text](scr2.png)
