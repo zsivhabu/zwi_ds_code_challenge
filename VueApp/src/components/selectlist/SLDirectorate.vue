@@ -1,16 +1,15 @@
 <script lang="ts">
 
-import {defineComponent} from "vue";
+import {defineComponent, onMounted} from "vue";
 import {SelectListService} from "@/services/selectListService";
 import {useSelectLists} from "@//stores/selectLists";
 import GenericServerSelectList from "@/components/selectlist/GenericServerSelectList.vue";
-import type {SelectOption} from "@/models/ui/selectOption";
 
 export default defineComponent({
   components: {GenericServerSelectList},
   props: {
     modalValue: {
-      type: Object as () => SelectOption,
+      type: String,
       required: true,
       default: null,
     },
@@ -22,7 +21,7 @@ export default defineComponent({
   setup: function (props) {
 
     const selectOptionsFromStore = useSelectLists().directorateList;
-    const selectOptionsFromServer = new SelectListService().getDirectorateSelectList(false);
+    const selectOptionsFromServer = new SelectListService().getSelectOptions('directorate', false);
 
     return {
       selectOptionsFromStore,

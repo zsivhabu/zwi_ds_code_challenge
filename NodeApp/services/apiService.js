@@ -26,17 +26,9 @@ function readCsvData(filePath) {
     return csvData;
 }
 
-// Endpoint to get unique values by column name from a local CSV file
 /**
  * @swagger
- * tags:
- *   name: Dashboard Queries
- *   description: Endpoints for Service Request Dashboard Queries
- */
-
-/**
- * @swagger
- * /unique-by-column/{columnName}:
+ *  /api/unique-by-column/{columnName}:
  *   get:
  *     summary: Get unique values for a specific column from a local CSV file
  *     tags: [CSV Operations]
@@ -130,21 +122,66 @@ router.get('/unique-by-column/:columnName', async (req, res) => {
 
 /**
  * @swagger
- * /search:
+ * /api/search:
  *   get:
  *     summary: Search CSV data based on query parameters
  *     tags: [CSV Operations]
  *     parameters:
  *       - in: query
- *         name: start_date
+ *         name: notificationNumber
  *         schema:
  *           type: string
- *         description: Start date for date range filtering
+ *         description: Notification number for filtering
  *       - in: query
- *         name: end_date
+ *         name: referenceNumber
  *         schema:
  *           type: string
- *         description: End date for date range filtering
+ *         description: Reference number for filtering
+ *       - in: query
+ *         name: directorate
+ *         schema:
+ *           type: string
+ *         description: Directorate for filtering
+ *       - in: query
+ *         name: branch
+ *         schema:
+ *           type: string
+ *         description: Branch for filtering
+ *       - in: query
+ *         name: department
+ *         schema:
+ *           type: string
+ *         description: Department for filtering
+ *       - in: query
+ *         name: causeCode
+ *         schema:
+ *           type: string
+ *         description: Cause code for filtering
+ *       - in: query
+ *         name: causeCodeGroup
+ *         schema:
+ *           type: string
+ *         description: Cause code group for filtering
+ *       - in: query
+ *         name: code
+ *         schema:
+ *           type: string
+ *         description: Code for filtering
+ *       - in: query
+ *         name: hexId
+ *         schema:
+ *           type: string
+ *         description: Hex ID for filtering
+ *       - in: query
+ *         name: officialSuburb
+ *         schema:
+ *           type: string
+ *         description: Official suburb for filtering
+ *       - in: query
+ *         name: section
+ *         schema:
+ *           type: string
+ *         description: Section for filtering
  *       - in: query
  *         name: latitude
  *         schema:
@@ -161,17 +198,32 @@ router.get('/unique-by-column/:columnName', async (req, res) => {
  *           type: number
  *         description: Radius (in kilometers) for geospatial filtering
  *       - in: query
- *         name: field_name
+ *         name: creation_start_date
  *         schema:
  *           type: string
- *         description: Field name for additional field-based filtering
+ *         description: Start date for creation date range filtering
+ *       - in: query
+ *         name: creation_end_date
+ *         schema:
+ *           type: string
+ *         description: End date for creation date range filtering
+ *       - in: query
+ *         name: completion_start_date
+ *         schema:
+ *           type: string
+ *         description: Start date for completion date range filtering
+ *       - in: query
+ *         name: completion_end_date
+ *         schema:
+ *           type: string
+ *         description: End date for completion date range filtering
  *       - in: query
  *         name: page_size
  *         schema:
  *           type: integer
  *         description: Number of items per page for pagination
  *       - in: query
- *         name: page
+ *         name: page_number
  *         schema:
  *           type: integer
  *         description: Page number for pagination
@@ -199,28 +251,29 @@ router.get('/search', (req, res) => {
         const filePath = 's3files/sr_hex.csv';
         const searchData = readCsvData(filePath);
 
-        // Apply filters based on query parameters
         const filteredData = searchData.filter((item) => {
             // Date range filtering for creation_timestamp
             const creationTimestamp = new Date(item.creation_timestamp);
-            const startDate = new Date(req.query.start_date);
-            const endDate = new Date(req.query.end_date);
+            const startDateCreation = new Date(req.query.creation_start_date);
+            const endDateCreation = new Date(req.query.creation_end_date);
             if (
                 !isNaN(creationTimestamp.getTime()) &&
-                !isNaN(startDate.getTime()) &&
-                !isNaN(endDate.getTime()) &&
-                (creationTimestamp >= startDate && creationTimestamp <= endDate)
+                !isNaN(startDateCreation.getTime()) &&
+                !isNaN(endDateCreation.getTime()) &&
+                (creationTimestamp < startDateCreation || creationTimestamp > endDateCreation)
             ) {
                 return false;
             }
 
             // Date range filtering for completion_timestamp
             const completionTimestamp = new Date(item.completion_timestamp);
+            const startDateCompletion = new Date(req.query.completion_start_date);
+            const endDateCompletion = new Date(req.query.completion_end_date);
             if (
                 !isNaN(completionTimestamp.getTime()) &&
-                !isNaN(startDate.getTime()) &&
-                !isNaN(endDate.getTime()) &&
-                (completionTimestamp >= startDate && completionTimestamp <= endDate)
+                !isNaN(startDateCompletion.getTime()) &&
+                !isNaN(endDateCompletion.getTime()) &&
+                (completionTimestamp < startDateCompletion || completionTimestamp > endDateCompletion)
             ) {
                 return false;
             }
@@ -249,22 +302,47 @@ router.get('/search', (req, res) => {
                 }
             }
 
-            // Additional field-based filtering (example: search by 'field_name')
-            if (
-                req.query.field_name &&
-                item.field_name !== req.query.field_name
-            ) {
+            // Additional field-based filtering
+            if (req.query.notificationNumber && item.notification_number !== req.query.notificationNumber) {
                 return false;
             }
-
-            // Add more field-based filters as needed
+            if (req.query.referenceNumber && item.reference_number !== req.query.referenceNumber) {
+                return false;
+            }
+            if (req.query.directorate && item.directorate !== req.query.directorate) {
+                return false;
+            }
+            if (req.query.branch && item.branch !== req.query.branch) {
+                return false;
+            }
+            if (req.query.department && item.department !== req.query.department) {
+                return false;
+            }
+            if (req.query.causeCode && item.cause_code !== req.query.causeCode) {
+                return false;
+            }
+            if (req.query.causeCodeGroup && item.cause_code_group !== req.query.causeCodeGroup) {
+                return false;
+            }
+            if (req.query.code && item.code !== req.query.code) {
+                return false;
+            }
+            if (req.query.hexId && item.h3_level8_index !== req.query.hexId) {
+                return false;
+            }
+            if (req.query.officialSuburb && item.official_suburb !== req.query.officialSuburb) {
+                return false;
+            }
+            if (req.query.section && item.section !== req.query.section) {
+                return false;
+            }
 
             return true;
         });
 
         // Pagination
         const pageSize = parseInt(req.query.page_size) || 100;
-        const page = parseInt(req.query.page) || 1;
+        const page = parseInt(req.query.page_number) || 1;
         const startIndex = (page - 1) * pageSize;
         const endIndex = startIndex + pageSize;
         const paginatedData = filteredData.slice(startIndex, endIndex);
@@ -274,6 +352,25 @@ router.get('/search', (req, res) => {
         res.status(500).json({ error: 'Internal Server Error' });
     }
 });
+
+function calculateDistance(lat1, lon1, lat2, lon2) {
+    const R = 6371; // Radius of the Earth in kilometers
+    const dLat = deg2rad(lat2 - lat1);
+    const dLon = deg2rad(lon2 - lon1);
+    const a =
+        Math.sin(dLat / 2) * Math.sin(dLat / 2) +
+        Math.cos(deg2rad(lat1)) * Math.cos(deg2rad(lat2)) *
+        Math.sin(dLon / 2) * Math.sin(dLon / 2);
+    const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
+    const distance = R * c; // Distance in kilometers
+
+    return distance;
+}
+
+function deg2rad(deg) {
+    return deg * (Math.PI / 180);
+}
+
 
 
 module.exports = router;
