@@ -27,3 +27,8 @@ The project includes two main folders:
 ## 3. NodeApp
 - This folder contains part of task 6, which is a NodeJs Express API project designed to serve VueApp
 - For detailed information and instructions, please refer to the README file located at [NodeApp/README.md](NodeApp). 
+
+
+#Screenshots
+## 1. Table Veiw 
+![Alt Text](scr1.png)
