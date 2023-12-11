@@ -20,7 +20,7 @@ if (!fs.existsSync(filesFolder)) {
 
 app.use('/swagger', swaggerUi.serve, swaggerUi.setup(swaggerSpec));
 
-app.use('', apiRoutes);
+app.use('/api', apiRoutes);
 
 downloadAndUnzipFile().then(() => {
     app.listen(port, () => {

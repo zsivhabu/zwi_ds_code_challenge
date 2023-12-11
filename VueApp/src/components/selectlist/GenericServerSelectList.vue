@@ -1,14 +1,12 @@
 <script lang="ts">
 
 import {defineComponent, ref} from "vue";
-import {SelectOption} from "@/models/ui/selectOption";
 import {useSelectLists} from "@/stores/selectLists";
-import {SelectListUtils} from "@/utils/selectListUtils";
 
 export default defineComponent({
   props: {
     modalValue: {
-      type: Object as () => SelectOption,
+      type: String,
       required: true,
       default: null,
     },
@@ -21,31 +19,29 @@ export default defineComponent({
       required: true,
     },
     selectListFromStore: {
-      type: Object as () => SelectOption[],
-      default: () => [],
+      type: Object as () => String[],
     },
     selectListFromServer: {
-      type: Promise<SelectOption[]>,
+      type: Promise<String[]>,
       required: true,
     }
   },
   setup: function (props, { emit }) {
-
-    const selectOptions = ref<SelectOption[]>([SelectListUtils.DEFAULT_SELECT_LIST_OPTION]);
+    const selectOptions = ref<String[]>(['Any']);
     selectOptions.value = props.selectListFromStore;
 
     props.selectListFromServer.then(response => {
       selectOptions.value = response;
-
       const useSelectList = useSelectLists();
       (useSelectList as any)[props.storeMethodName] = response;
+
 
       doOnDoneFetching();
     }).catch(error => {
       console.log(error)
     })
 
-    function handleInput (selectedOption: SelectOption)
+    function handleInput (selectedOption: string)
     {
       emit("update:modelValue", selectedOption)
       if (props.onChange !== null && props.onChange !== undefined) {
@@ -59,14 +55,14 @@ export default defineComponent({
         //@ts-ignore
         if (!selectOptions.value.find(x => x.id == props.modalValue.id && x.description == props.modalValue.description))
         {
-          emit("update:modelValue", SelectListUtils.DEFAULT_SELECT_LIST_OPTION)
+          emit("update:modelValue", 'Any')
         }
         else 
         {
           emit("update:modelValue", props.modalValue)
         }
       } catch (e) {
-        emit("update:modelValue", SelectListUtils.DEFAULT_SELECT_LIST_OPTION)
+        emit("update:modelValue", 'Any')
       }
     }
 
@@ -79,5 +75,5 @@ export default defineComponent({
 });
 </script>
 <template>
-  <v-select v-model="modelValue" :options="selectOptions" :clearable="false"   class=" mb-2" @option:selected="handleInput"></v-select>
+  <v-select :teleport="true" v-model="modelValue" :options="selectOptions" :clearable="false"   class=" mb-2" @option:selected="handleInput"></v-select>
 </template>

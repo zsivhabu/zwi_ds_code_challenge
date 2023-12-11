@@ -16,7 +16,7 @@ export default defineComponent({
 </script>
 
 <template>
-  <div id="content" class="container" :class="{ 'content-maximized': isSidebarHidden, 'content-minimized': !isSidebarHidden }">
+  <div id="content" class="" :class="{ 'content-maximized': isSidebarHidden, 'content-minimized': !isSidebarHidden }">
       <router-view></router-view>
   </div>
 </template>

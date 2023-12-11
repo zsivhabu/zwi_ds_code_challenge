@@ -4,13 +4,12 @@ import {defineComponent} from "vue";
 import {SelectListService} from "@/services/selectListService";
 import {useSelectLists} from "@//stores/selectLists";
 import GenericServerSelectList from "@/components/selectlist/GenericServerSelectList.vue";
-import type {SelectOption} from "@/models/ui/selectOption";
 
 export default defineComponent({
   components: {GenericServerSelectList},
   props: {
     modalValue: {
-      type: Object as () => SelectOption,
+      type: String,
       required: true,
       default: null,
     },
@@ -21,8 +20,8 @@ export default defineComponent({
   },
   setup: function (props) {
 
-    const selectOptionsFromStore = useSelectLists().directorateList;
-    const selectOptionsFromServer = new SelectListService().getDirectorateSelectList(false);
+    const selectOptionsFromStore = useSelectLists().departmentList;
+    const selectOptionsFromServer = new SelectListService().getSelectOptions('department',true);
 
     return {
       selectOptionsFromStore,
@@ -39,5 +38,5 @@ export default defineComponent({
       :on-change="onChange"
       :select-list-from-store="selectOptionsFromStore"
       :select-list-from-server="selectOptionsFromServer"
-      store-method-name="directorateList"/>
+      store-method-name="departmentList"/>
 </template>

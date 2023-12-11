@@ -3,6 +3,7 @@
 @import './input.css';
 @import './dpcalendar.css';
 @import './vue3select.css';
+@import './custom-easy-table.css';
 
 .text-10px {
   font-size: 10px;

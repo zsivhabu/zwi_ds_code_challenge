@@ -4,8 +4,6 @@ import {useMenuStore} from "@/stores/menu";
 import {storeToRefs} from "pinia";
 import {useRouter} from "vue-router";
 import SLDirectorate from "@/components/selectlist/SLDirectorate.vue";
-import {SelectListUtils} from "@/utils/selectListUtils";
-import type {SelectOption} from "@/models/ui/selectOption";
 import SLDepartment from "@/components/selectlist/SLDepartment.vue";
 import SLBranch from "@/components/selectlist/SLBranch.vue";
 import SLCode from "@/components/selectlist/SLCode.vue";
@@ -23,6 +21,7 @@ export default defineComponent({
     const {isSidebarHidden} = storeToRefs(menuStore)
     const {routeName} = storeToRefs(menuStore)
     const {isHideSelectFilters} = storeToRefs(menuStore)
+    const {searchFilter} = storeToRefs(menuStore)
     const useRoute = useRouter()
 
     // Methods
@@ -39,14 +38,16 @@ export default defineComponent({
       menuStore.toggleSelectFilters()
     }
 
+    function filter() {
+      menuStore.incrementSubmit()
+    }
+
     // On load
     onMounted(() => {
       useRoute.isReady().then(() => {
         menuStore.setRouteName(useRoute.currentRoute.value.name as string)
       });
     });
-
-    let value = ref<SelectOption>(SelectListUtils.DEFAULT_SELECT_LIST_OPTION)
 
     return {
       isSidebarHidden,
@@ -55,7 +56,8 @@ export default defineComponent({
       toggleSidebar,
       isHideSelectFilters,
       toggleSelectFilters,
-      value
+      searchFilter,
+      filter
     };
   }
 });
@@ -63,7 +65,6 @@ export default defineComponent({
 </script>
 
 <template>
-  dsffffffffffffffffffffffffsdffffffffffffffffffffff
   <span class="absolute text-white text-4xl top-5 left-4 cursor-pointer z-40" @click="toggleSidebar()">
       <i class="bi bi-filter-left px-2 bg-gray-900 rounded-md"></i>
   </span>
@@ -104,7 +105,8 @@ export default defineComponent({
               <div class="items-center pl-1 pr-2 duration-900 text-white">
                 <div class="relative float-label-input">
                   <!-- Add placeholder if you need floating effect -->
-                  <input type="text"  class="block bg-city-dark-blue w-full focus:outline-none focus:shadow-outline border border-city-pink rounded-md py-3 px-3  appearance-none leading-normal" value="">
+                  <input type="text"  class="block bg-city-dark-blue w-full focus:outline-none focus:shadow-outline border border-city-pink rounded-md py-3 px-3
+                  appearance-none leading-normal" v-model="searchFilter.notificationNumber">
                   <label class="absolute top-3 left-0 text-white pointer-events-none transition duration-200 ease-in-outbg-white px-2">Notification Number</label>
                 </div>
               </div>
@@ -112,7 +114,8 @@ export default defineComponent({
           <div class="w-1/2">
             <div class="items-center pl-1 pr-2 duration-900 text-white">
               <div class="relative float-label-input">
-                <input type="text" class="block bg-city-dark-blue w-full focus:outline-none focus:shadow-outline border border-city-pink rounded-md py-3 px-3  appearance-none leading-normal" value="">
+                <input type="text" class="block bg-city-dark-blue w-full focus:outline-none focus:shadow-outline border border-city-pink rounded-md py-3 px-3
+                  appearance-none leading-normal"  v-model="searchFilter.referenceNumber">
                 <label class="absolute top-3 left-0 text-white pointer-events-none transition duration-200 ease-in-outbg-white px-2">Reference Number</label>
               </div>
             </div>
@@ -154,7 +157,7 @@ export default defineComponent({
                 <div class="w-[100%]">
                   <div class="items-center pl-1 pr-2 duration-900 text-white">
                     <div class="relative float-label-input-always">
-                      <s-l-directorate class="input-dark" :include-default-select-option="false" v-model="value" :modal-value="value" multiple></s-l-directorate>
+                      <s-l-directorate class="input-dark" :include-default-select-option="true" v-model="searchFilter.directorate" :modal-value="searchFilter.directorate" ></s-l-directorate>
                       <label class="absolute top-3 left-0 text-white pointer-events-none transition duration-200 ease-in-outbg-white px-2">Directorate</label>
                     </div>
                   </div>
@@ -166,7 +169,7 @@ export default defineComponent({
                 <div class="w-[100%]">
                   <div class="items-center pl-1 pr-2 duration-900 text-white">
                     <div class="relative float-label-input-always">
-                      <s-l-department class="input-dark" :include-default-select-option="false" v-model="value" :modal-value="value" multiple></s-l-department>
+                      <s-l-department class="input-dark" :include-default-select-option="true" v-model="searchFilter.department" :modal-value="searchFilter.department" ></s-l-department>
                       <label class="absolute top-3 left-0 text-white pointer-events-none transition duration-200 ease-in-outbg-white px-2">Department</label>
                     </div>
                   </div>
@@ -183,7 +186,7 @@ export default defineComponent({
                 <div class="w-[100%]">
                   <div class="items-center pl-1 pr-2 duration-900 text-white">
                     <div class="relative float-label-input-always">
-                      <s-l-branch class="input-dark" :include-default-select-option="false" v-model="value" :modal-value="value" multiple></s-l-branch>
+                      <s-l-branch class="input-dark" :include-default-select-option="true" v-model="searchFilter.branch" :modal-value="searchFilter.branch" ></s-l-branch>
                       <label class="absolute top-3 left-0 text-white pointer-events-none transition duration-200 ease-in-outbg-white px-2">Branch</label>
                     </div>
                   </div>
@@ -195,7 +198,7 @@ export default defineComponent({
                 <div class="w-[100%]">
                   <div class="items-center pl-1 pr-2 duration-900 text-white">
                     <div class="relative float-label-input-always">
-                      <s-l-code class="input-dark" :include-default-select-option="false" v-model="value" :modal-value="value" multiple></s-l-code>
+                      <s-l-code class="input-dark" :include-default-select-option="true" v-model="searchFilter.code" :modal-value="searchFilter.code" ></s-l-code>
                       <label class="absolute top-3 left-0 text-white pointer-events-none transition duration-200 ease-in-outbg-white px-2">Code</label>
                     </div>
                   </div>
@@ -212,7 +215,7 @@ export default defineComponent({
                 <div class="w-[100%]">
                   <div class="items-center pl-1 pr-2 duration-900 text-white">
                     <div class="relative float-label-input-always">
-                      <s-l-cause-code-group class="input-dark" :include-default-select-option="false" v-model="value" :modal-value="value" multiple></s-l-cause-code-group>
+                      <s-l-cause-code-group class="input-dark" :include-default-select-option="true" v-model="searchFilter.causeCodeGroup" :modal-value="searchFilter.causeCodeGroup" ></s-l-cause-code-group>
                       <label class="absolute top-3 left-0 text-white pointer-events-none transition duration-200 ease-in-outbg-white px-2">Cause Code Group</label>
                     </div>
                   </div>
@@ -224,7 +227,7 @@ export default defineComponent({
                 <div class="w-[100%]">
                   <div class="items-center pl-1 pr-2 duration-900 text-white">
                     <div class="relative float-label-input-always">
-                      <s-l-cause-code class="input-dark" :include-default-select-option="false" v-model="value" :modal-value="value" multiple></s-l-cause-code>
+                      <s-l-cause-code class="input-dark" :include-default-select-option="true" v-model="searchFilter.code" :modal-value="searchFilter.code" ></s-l-cause-code>
                       <label class="absolute top-3 left-0 text-white pointer-events-none transition duration-200 ease-in-outbg-white px-2">Code</label>
                     </div>
                   </div>
@@ -241,7 +244,7 @@ export default defineComponent({
                 <div class="w-[100%]">
                   <div class="items-center pl-1 pr-2 duration-900 text-white">
                     <div class="relative float-label-input-always">
-                      <s-l-official-suburb class="input-dark" :include-default-select-option="false" v-model="value" :modal-value="value" multiple></s-l-official-suburb>
+                      <s-l-official-suburb class="input-dark" :include-default-select-option="true" v-model="searchFilter.officialSuburb" :modal-value="searchFilter.officialSuburb" ></s-l-official-suburb>
                       <label class="absolute top-3 left-0 text-white pointer-events-none transition duration-200 ease-in-outbg-white px-2">Suburb</label>
                     </div>
                   </div>
@@ -253,7 +256,7 @@ export default defineComponent({
                 <div class="w-[100%]">
                   <div class="items-center pl-1 pr-2 duration-900 text-white">
                     <div class="relative float-label-input-always">
-                      <s-l-hex-id class="input-dark" :include-default-select-option="false" v-model="value" :modal-value="value" multiple></s-l-hex-id>
+                      <s-l-hex-id class="input-dark" :include-default-select-option="true" v-model="searchFilter.hexId" :modal-value="searchFilter.hexId" ></s-l-hex-id>
                       <label class="absolute top-3 left-0 text-white pointer-events-none transition duration-200 ease-in-outbg-white px-2">H3 Level8 Index</label>
                     </div>
                   </div>
@@ -288,7 +291,7 @@ export default defineComponent({
             <div class="w-[100%]">
               <div class="items-center pl-1 pr-2 duration-900 text-white">
                 <div class="relative float-label-input-always">
-                  <input type="button" class="bg-city-pink w-full cursor-pointer focus:outline-none border border-city-pink rounded-md py-3 px-3 " value="Apply">
+                  <input type="button" class="bg-city-pink w-full cursor-pointer focus:outline-none border border-city-pink rounded-md py-3 px-3 " @click="filter" value="Apply">
                 </div>
               </div>
             </div>
@@ -325,6 +328,27 @@ export default defineComponent({
 
 #sidebar, #content {
   transition: transform 0.5s ease;
+}
+
+.vs__dropdown-menu  {
+  width: 1000px !important;
+}
+
+>>> {
+  --vs-controls-color: #664cc3;
+  --vs-border-color: #664cc3;
+
+  --vs-dropdown-bg: #282c34;
+  --vs-dropdown-color: #cc99cd;
+  --vs-dropdown-option-color: #cc99cd;
+
+  --vs-selected-bg: #664cc3;
+  --vs-selected-color: #eeeeee;
+
+  --vs-search-input-color: #eeeeee;
+
+  --vs-dropdown-option--active-bg: #664cc3;
+  --vs-dropdown-option--active-color: #eeeeee;
 }
 
 </style>
