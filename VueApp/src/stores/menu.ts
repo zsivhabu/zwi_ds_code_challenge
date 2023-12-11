@@ -10,6 +10,7 @@ const DEFAULT_SEARCH_FILTERS: SearchFilter = {
 }
 
 interface MenuState {
+    h3Blocks: [];
     isSidebarHidden: boolean;
     isHideSelectFilters: boolean;
     routeName: string;
@@ -25,7 +26,8 @@ export const useMenuStore = defineStore("menuState", {
         routeName: "",
         searchFilter: DEFAULT_SEARCH_FILTERS,
         submitIncrement: 0,
-        selectedDirectorate: "URBAN WASTE MANAGEMENT"
+        selectedDirectorate: "URBAN WASTE MANAGEMENT",
+        h3Blocks: []
     }),
     persist: true,
     getters: {
@@ -54,6 +56,9 @@ export const useMenuStore = defineStore("menuState", {
         },
         setSelectedDirectorate(directorate: string) {
             this.selectedDirectorate = directorate;
+        },
+        setH3Blocks(h3Blocks: []) {
+            this.h3Blocks = h3Blocks;
         }
     },
 });

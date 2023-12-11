@@ -35,3 +35,7 @@ The project includes two main folders:
 
 ## 2. Chart View
 ![Alt Text](scr2.png)
+
+## 2. Chart View
+- Not done, missing h3 blocks polygons and features around that
+![Alt Text](scr3.png)

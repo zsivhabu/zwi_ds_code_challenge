@@ -47,7 +47,7 @@ _____
 Access the Swagger documentation at: http://localhost:3000/swagger or
 http://api-cct.zwivhu.dev/swagger
 
-Please note that endpoints for chart data are not included in the Swagger documentation.
+Please note that endpoints for chart and map data are not included in the Swagger documentation.
 
 **1. Get Distinct Column Values**
 

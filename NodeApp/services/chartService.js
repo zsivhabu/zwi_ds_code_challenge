@@ -3,7 +3,7 @@ const router = express.Router();
 const fs = require('fs');
 const csv = require('csv-parser');
 const NodeCache = require('node-cache');
-const cache = new NodeCache({ stdTTL: 0 * 60 }); // 30 minutes
+const cache = new NodeCache({ stdTTL: 30 * 60 }); // 30 minutes
 
 function readCsvData(filePath) {
     return new Promise((resolve, reject) => {
