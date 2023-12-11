@@ -2,7 +2,7 @@
 
 
 # Live Example
-### http://api-cct.zwivhu.dev/swagger
+### http://cct-api.zwivhu.dev/swagger
 
 
 ## Introduction
@@ -45,7 +45,7 @@ _____
 
 ## Swagger Documentation
 Access the Swagger documentation at: http://localhost:3000/swagger or
-http://api-cct.zwivhu.dev/swagger
+http://cct-api.zwivhu.dev/swagger
 
 Please note that endpoints for chart and map data are not included in the Swagger documentation.
 
